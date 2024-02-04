@@ -9,7 +9,8 @@ async function get(user, repo) {
 	return new Promise(async (resolve, reject) => {
 	const commit = await octokit.request('GET /repos/{owner}/{repo}/commits', {
 		owner: user,
-		repo: repo
+		repo: repo,
+		auth: `${process.env.GIT_TOKEN}`
 	})
 	var commitsList = commit.data
 	const first = Object.entries(commitsList[0])
