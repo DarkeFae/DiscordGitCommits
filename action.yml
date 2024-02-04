@@ -1,6 +1,0 @@
-name: 'Push changelog to discord'
-description: 'Push changelog to discord'
-author: DarkeFae
-runs:
-  using: 'docker'
-  image: 'Dockerfile'
