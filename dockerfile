@@ -9,4 +9,4 @@ RUN chmod +x dist/index.js
 ADD dist/git.js dist/
 RUN chmod +x dist/git.js 
 
-ENTRYPOINT ["node", "dist/index.js"]
+ENTRYPOINT ["npm", "run run"]
