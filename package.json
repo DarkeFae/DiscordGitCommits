@@ -1,0 +1,18 @@
+{
+  "name": "discordgitcommits",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "scripts": {
+    "run": "node ."
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "discord.js": "^14.14.1",
+    "dotenv": "^16.4.1",
+    "octokit": "^3.1.2",
+    "path": "^0.12.7"
+  }
+}
