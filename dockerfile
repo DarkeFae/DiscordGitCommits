@@ -1,4 +1,4 @@
-FROM node:21-alpine:3.18
+FROM node:21-alpine
 
 ADD package.json package-lock.json /
 RUN npm i 
