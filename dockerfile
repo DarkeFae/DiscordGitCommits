@@ -1,4 +1,5 @@
-FROM nodejs/alpine-node:3.19
+FROM alpine:3.18
+ENV NODE_VERSION 21.6.1
 
 ADD package.json package-lock.json /
 RUN npm i 
