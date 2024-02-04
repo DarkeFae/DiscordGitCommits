@@ -25,6 +25,7 @@ REQUIRED_ENV_VARS.forEach(env => {
 
 async function main() {
 	try {
+		console.log(process.env.ROLE)
 		const response = await get(process.env.GIT_USERNAME, process.env.GIT_REPOSITORY)
 		const changesTemp = response.split(/\[.*\]/gm)
 		const changes = changesTemp.slice(1, changesTemp.length)
