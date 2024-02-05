@@ -1,9 +1,34 @@
+const fs = require('fs');
+const child = require('child_process');
+
+function InstallPackages() {
+	console.log('You didn\'t install the required node packages first!')
+	console.log('Please wait... starting to install all required node packages using child process')
+	console.log('If the bot can\'t install the package please install it manually')
+	try {
+		child.execSync('npm i')
+		console.log('Install complete!, please run "node index" command again!')
+		process.exit()
+	} catch (err) {
+		console.log('Error! ', err)
+		process.exit()
+	}
+}
+
+
+if (fs.existsSync('./node_modules/crypto')) {
+	console.log('All required node packages are installed, starting the bot...')
+} else {
+	InstallPackages()
+}
+
 const dotenv = require('dotenv').config();
 const http = require('http');
 const url = require('url');
 const { StringDecoder } = require('string_decoder');
 const crypto = require('crypto');
 const sendToDiscord = require('./sendToDiscord.js');
+
 
 //runs a server on port port and listens for a POST request to /webhook
 const server = http.createServer((req, res) => {
