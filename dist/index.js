@@ -45,7 +45,7 @@ const server = http.createServer((req, res) => {
 			body += decoder.end();
 
 			const signature = req.headers['x-hub-signature'];
-			const hmac = crypto.createHmac('sha1', `${process.env.WEBHOOK_SECRET}`);
+			const hmac = crypto.createHmac('sha1', `${process.env.WEB_SERVER_SECRET}`);
 
 			hmac.update(body);
 
