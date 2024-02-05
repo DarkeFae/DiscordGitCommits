@@ -2,16 +2,19 @@ const dotenv = require('dotenv').config();
 const { Octokit } = require('@octokit/core');
 const https = require('https');
 
+//Octokit is the github api wrapper
 const octokit = new Octokit({
 	auth: `${process.env.GIT_TOKEN}`
 })
 async function get(user, repo) {
+	// gets the list of commits
 	return new Promise(async (resolve, reject) => {
 	const commit = await octokit.request('GET /repos/{owner}/{repo}/commits', {
 		owner: user,
 		repo: repo,
 		auth: `${process.env.GIT_TOKEN}`
 	})
+	// works out the ref of the latest commit
 	var commitsList = commit.data
 	const first = Object.entries(commitsList[0])
 	const ref = first[0][1]
@@ -20,16 +23,16 @@ async function get(user, repo) {
 		repo: repo,
 		ref: ref
 	})
-	//console.log(commitData.data)
+	
+	// gets the file contents of the latest commit
 	var commitFile = commitData.data["files"][0]
-	//console.log(commitFile.filename)
-
 	const fileData = await octokit.request('GET /repos/{owner}/{repo}/contents/{path}', {
 		owner: user,
 		repo: repo,
 		path: commitFile.filename
 	})
 
+	// calls function for getting the file contents of the latest commit
 	const output = await fileContents(fileData.data.download_url)
 		.then((data) => {
 			return data
@@ -43,6 +46,7 @@ async function get(user, repo) {
 	})
 }
 
+// function for getting the file contents of the latest commit
 function fileContents(url) {
 	return new Promise((resolve, reject) => {
 	https.get(url, (res) => {
@@ -63,7 +67,5 @@ function fileContents(url) {
 })
 }
 
-//get(process.env.GIT_USERNAME, process.env.GIT_REPOSITORY)
-//	.catch(err => console.error(err))
-
+// exports the get function for the main file
 module.exports = get

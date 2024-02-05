@@ -5,8 +5,10 @@ const { StringDecoder } = require('string_decoder');
 const crypto = require('crypto');
 const sendToDiscord = require('./sendToDiscord.js');
 
+//runs a server on port port and listens for a POST request to /webhook
 const server = http.createServer((req, res) => {
 	if (req.method === 'POST' && url.parse(req.url).pathname === '/webhook') {
+		//blackmagic to get the body of the request for authentication
 		let body = '';
 		let decoder = new StringDecoder('utf-8');
 
@@ -26,6 +28,7 @@ const server = http.createServer((req, res) => {
 
 			if (signature === computedSignature) {
 				console.log('Valid signature');
+				//if the signature is valid, send the data to discord
 				sendToDiscord();
 
 			} else {
@@ -36,11 +39,11 @@ const server = http.createServer((req, res) => {
 		});
 	} else {
 		res.statusCode = 404;
-		res.end('Not found');
+		res.end('Go away!');
 	}
 });
 
-const port = 3000; // Change this to the desired port number
+const port = process.env.WEB_SERVER_PORT; // Change this to the desired port number
 server.listen(port, () => {
 	console.log(`Server running on port ${port}`);
 });
