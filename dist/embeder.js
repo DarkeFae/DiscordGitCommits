@@ -23,7 +23,7 @@ async function embed() {
 					"fields": [
 						{
 							"name": "",
-							"value": result[section][1].replaceAll('<done>', '<a:verified:1162750387112124446> '),
+							"value": result[section][1].replaceAll('<done>', '<a:verified:1162750387112124446> ').replaceAll('<todo>', '<a:pending:1143528100194435153> ').replaceAll('<broke>', '<a:thisisfinefire:1204908327805649046> '),
 							"inline": false
 						}
 					]

@@ -1,6 +1,4 @@
 const dotenv = require('dotenv').config();
-//const get = require('./git.js');
-const fs = require('fs');
 const https = require('https');
 const embeder = require('./embeder.js');
 
