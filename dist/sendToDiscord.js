@@ -7,7 +7,7 @@ async function sendToDiscord() {
 		console.log(`role is ${process.env.ROLE}`)
 		// calls the get function from git.js
 		const data = JSON.stringify(await embeder());
-		console.log(data)
+		//console.log(data)
 		// setup the discord webhook
 		const options = {
 			hostname: 'discord.com',
