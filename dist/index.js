@@ -1,6 +1,6 @@
 const fs = require('fs');
 const child = require('child_process');
-
+//automated package installer
 function InstallPackages() {
 	console.log('You didn\'t install the required node packages first!')
 	console.log('Please wait... starting to install all required node packages using child process')
@@ -10,12 +10,12 @@ function InstallPackages() {
 		console.log('Install complete!, please run "node index" command again!')
 		process.exit()
 	} catch (err) {
-		console.log('Error! ', err)
+		console.log('Error!\n', err)
 		process.exit()
 	}
 }
 
-
+//check if the required node packages are installed
 if (fs.existsSync('./node_modules/crypto')) {
 	console.log('All required node packages are installed, starting the bot...')
 } else {
@@ -31,8 +31,8 @@ const sendToDiscord = require('./webhook_git/sendToDiscord.js');
 //const sendToAzuriom = require('./webhook_azuriom/sendToAzuriom.js');
 
 
-//runs a server on port port and listens for a POST request to /webhook
 const server = http.createServer((req, res) => {
+	//testing route for getting data dumps
 	if (req.method === 'POST' && url.parse(req.url).pathname === '/dump') {
 		let body = '';
 
@@ -53,6 +53,7 @@ const server = http.createServer((req, res) => {
 		res.statusCode = 200;
 		res.end('Hello World');
 	} else
+	//route for the webhook from git
 	if (req.method === 'POST' && url.parse(req.url).pathname === '/webhook') {
 		//blackmagic to get the body of the request for authentication
 		let body = '';
@@ -84,16 +85,31 @@ const server = http.createServer((req, res) => {
 			res.end('Data sent to Discord');
 		});
 	} else 
+	//route for the webhook from azuriom
 	if (req.method === 'POST' && url.parse(req.url).pathname === '/azuriom') {
-		res.statusCode = 403;
-		res.end("Not Yet Implemented");
+		let body = '';
+
+		req.on('data', (data) => {
+			body += data;
+		});
+		req.on('end', () => {
+			const sig = req.headers['x-hub-signature'];
+
+			if (sig == process.env.AZURIOM_SECRET) {
+				console.log('Valid signature');
+				console.log(body);
+
+			} else {
+				console.log('Invalid signature');
+			}
+		});
 	} else {
 		res.statusCode = 404;
 		res.end('Go away!');
 	}
 });
 
-const port = process.env.WEB_SERVER_PORT; // Change this to the desired port number
+const port = process.env.WEB_SERVER_PORT; //port is configure in .env file
 server.listen(port, () => {
 	console.log(`Server running on port ${port}`);
 });
