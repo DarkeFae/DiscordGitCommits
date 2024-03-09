@@ -27,11 +27,32 @@ const http = require('http');
 const url = require('url');
 const { StringDecoder } = require('string_decoder');
 const crypto = require('crypto');
-const sendToDiscord = require('./sendToDiscord.js');
+const sendToDiscord = require('./webhook_git/sendToDiscord.js');
+//const sendToAzuriom = require('./webhook_azuriom/sendToAzuriom.js');
 
 
 //runs a server on port port and listens for a POST request to /webhook
 const server = http.createServer((req, res) => {
+	if (req.method === 'POST' && url.parse(req.url).pathname === '/dump') {
+		let body = '';
+
+		req.on('data', (data) => {
+			body += data;
+		});
+		req.on('end', () => {
+			const sig = req.headers['x-hub-signature'];
+
+			if (sig == process.env.AZURIOM_SECRET) {
+				console.log('Valid signature');
+				console.log(body);
+
+			} else {
+				console.log('Invalid signature');
+			}
+		});
+		res.statusCode = 200;
+		res.end('Hello World');
+	} else
 	if (req.method === 'POST' && url.parse(req.url).pathname === '/webhook') {
 		//blackmagic to get the body of the request for authentication
 		let body = '';
@@ -45,7 +66,7 @@ const server = http.createServer((req, res) => {
 			body += decoder.end();
 
 			const signature = req.headers['x-hub-signature'];
-			const hmac = crypto.createHmac('sha1', `${process.env.WEB_SERVER_SECRET}`);
+			const hmac = crypto.createHmac('sha1', `${process.env.GIT_SECRET}`);
 
 			hmac.update(body);
 
@@ -62,6 +83,10 @@ const server = http.createServer((req, res) => {
 			res.statusCode = 200;
 			res.end('Data sent to Discord');
 		});
+	} else 
+	if (req.method === 'POST' && url.parse(req.url).pathname === '/azuriom') {
+		res.statusCode = 403;
+		res.end("Not Yet Implemented");
 	} else {
 		res.statusCode = 404;
 		res.end('Go away!');
